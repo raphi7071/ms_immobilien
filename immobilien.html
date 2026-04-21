@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Immobilien – MS Immobilien Nürnberg</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">🏠</div>
+    <span>MS <em>Immobilien</em></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#ueber-mich">Über mich</a></li>
+    <li><a href="index.html#leistungen">Leistungen</a></li>
+    <li><a href="index.html#warum-ich">Warum ich?</a></li>
+    <li><a href="index.html#kontakt">Kontakt</a></li>
+    <li><a href="immobilien.html" class="nav-cta active">Immobilien</a></li>
+  </ul>
+</nav>
+
+<!-- ── PAGE HERO ── -->
+<div class="page-hero">
+  <h1>Immobilien in Nürnberg</h1>
+  <p>Aktuelle Angebote – von mir persönlich ausgewählt und betreut</p>
+</div>
+
+<!-- ── FILTER ── -->
+<div style="background:var(--white);border-bottom:1px solid var(--border);padding:1rem 1.5rem">
+  <div class="container" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+    <select id="filterType" onchange="renderListings()" style="padding:.5rem .8rem;border:1.5px solid var(--border);border-radius:8px;font-size:.9rem;color:var(--text);outline:none;cursor:pointer">
+      <option value="">Alle Angebotsarten</option>
+      <option value="Kaufen">Kaufen</option>
+      <option value="Mieten">Mieten</option>
+    </select>
+    <select id="filterProp" onchange="renderListings()" style="padding:.5rem .8rem;border:1.5px solid var(--border);border-radius:8px;font-size:.9rem;color:var(--text);outline:none;cursor:pointer">
+      <option value="">Alle Objekttypen</option>
+      <option value="Wohnung">Wohnung</option>
+      <option value="Haus">Haus</option>
+      <option value="Penthouse">Penthouse</option>
+      <option value="Villa">Villa</option>
+      <option value="Gewerbe">Gewerbe</option>
+      <option value="Grundstück">Grundstück</option>
+    </select>
+    <span id="filterCount" style="color:var(--muted);font-size:.88rem;margin-left:auto"></span>
+  </div>
+</div>
+
+<!-- ── LISTINGS ── -->
+<section class="listings-section">
+  <div class="container">
+    <div class="listings-header">
+      <h2>Aktuelle Angebote</h2>
+      <button class="btn btn-primary" onclick="document.getElementById('addSection').scrollIntoView({behavior:'smooth'})">
+        🔒 Objekt eintragen
+      </button>
+    </div>
+    <div id="listingsContainer"></div>
+  </div>
+</section>
+
+<!-- ── ADMIN LOGIN ── -->
+<section class="add-section" id="addSection">
+  <div class="container">
+    <div class="add-card" id="loginCard">
+      <h2>🔒 Nur für den Makler</h2>
+      <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.97rem">Dieser Bereich ist geschützt. Bitte Passwort eingeben um Objekte einzutragen.</p>
+      <form id="loginForm" style="display:flex;gap:.75rem;max-width:420px">
+        <div class="field" style="flex:1;margin:0">
+          <input type="password" id="passwordInput" placeholder="Passwort …" style="width:100%" autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="white-space:nowrap">Einloggen</button>
+      </form>
+      <p id="loginError" style="color:#dc2626;font-size:.88rem;margin-top:.6rem;display:none">Falsches Passwort. Bitte erneut versuchen.</p>
+    </div>
+
+<!-- ── FORMULAR ── -->
+    <div class="add-card" id="formCard" style="display:none">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid var(--border)">
+        <h2 style="margin:0;border:none;padding:0">➕ Neues Objekt eintragen</h2>
+        <button onclick="logout()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.88rem;font-weight:600">🔓 Ausloggen</button>
+      </div>
+
+      <form id="propForm">
+        <div class="form-section-title">Grunddaten</div>
+        <div class="field">
+          <label>Titel des Inserats *</label>
+          <input type="text" id="title" placeholder="z. B. Helle 3-Zimmer-Wohnung mit Balkon" required />
+        </div>
+        <div class="form-2col">
+          <div class="field">
+            <label>Angebotsart *</label>
+            <select id="offerType" required>
+              <option value="">Bitte wählen …</option>
+              <option value="Kaufen">Kaufen</option>
+              <option value="Mieten">Mieten</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Objekttyp *</label>
+            <select id="propType" required>
+              <option value="">Bitte wählen …</option>
+              <option value="Wohnung">Wohnung</option>
+              <option value="Haus">Haus</option>
+              <option value="Penthouse">Penthouse</option>
+              <option value="Villa">Villa</option>
+              <option value="Gewerbe">Gewerbe</option>
+              <option value="Grundstück">Grundstück</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-title">Standort</div>
+        <div class="form-3col">
+          <div class="field">
+            <label>Straße &amp; Hausnummer</label>
+            <input type="text" id="street" placeholder="Königstraße 12" />
+          </div>
+          <div class="field">
+            <label>PLZ</label>
+            <input type="text" id="zip" placeholder="90402" />
+          </div>
+          <div class="field">
+            <label>Stadt *</label>
+            <input type="text" id="city" placeholder="Nürnberg" required />
+          </div>
+        </div>
+        <div class="field">
+          <label>Stadtteil / Lage</label>
+          <input type="text" id="district" placeholder="z. B. Nürnberg-Gostenhof, Altstadt, Südstadt …" />
+        </div>
+
+        <div class="form-section-title">Details</div>
+        <div class="form-3col">
+          <div class="field">
+            <label>Wohnfläche (m²) *</label>
+            <input type="number" id="area" placeholder="75" min="1" required />
+          </div>
+          <div class="field">
+            <label>Zimmer *</label>
+            <input type="number" id="rooms" placeholder="3" min="1" step="0.5" required />
+          </div>
+          <div class="field">
+            <label>Stockwerk</label>
+            <input type="number" id="floor" placeholder="1" min="0" />
+          </div>
+        </div>
+        <div class="form-3col">
+          <div class="field">
+            <label>Baujahr</label>
+            <input type="number" id="year" placeholder="1980" min="1800" max="2030" />
+          </div>
+          <div class="field">
+            <label>Schlafzimmer</label>
+            <input type="number" id="bedrooms" placeholder="2" min="0" />
+          </div>
+          <div class="field">
+            <label>Badezimmer</label>
+            <input type="number" id="bathrooms" placeholder="1" min="0" />
+          </div>
+        </div>
+
+        <div class="form-section-title">Ausstattung</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem 2rem;margin-bottom:.5rem" id="features">
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Balkon" /> Balkon / Terrasse</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Garten" /> Garten</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Parkplatz" /> Parkplatz / Garage</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Lift" /> Aufzug</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Keller" /> Keller</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Einbauküche" /> Einbauküche</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Klimaanlage" /> Klimaanlage</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Fußbodenheizung" /> Fußbodenheizung</label>
+          <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Neubau" /> Neubau</label>
+        </div>
+
+        <div class="form-section-title">Preis</div>
+        <div class="form-2col">
+          <div class="field">
+            <label>Preis (€) *</label>
+            <input type="number" id="price" placeholder="250000" min="0" required />
+          </div>
+          <div class="field">
+            <label>Preiseinheit</label>
+            <select id="priceUnit">
+              <option value="gesamt">Gesamtpreis (Kauf)</option>
+              <option value="monatlich">Pro Monat (Miete)</option>
+              <option value="m2">Pro m²</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section-title">Beschreibung</div>
+        <div class="field">
+          <label>Beschreibungstext</label>
+          <textarea id="description" placeholder="Beschreiben Sie die Immobilie kurz …" style="min-height:110px"></textarea>
+        </div>
+
+        <div class="form-section-title">Kontakt für Anfragen</div>
+        <div class="form-2col">
+          <div class="field">
+            <label>Ansprechperson *</label>
+            <input type="text" id="contactName" placeholder="Markus Schmidt" required />
+          </div>
+          <div class="field">
+            <label>Telefon oder E-Mail *</label>
+            <input type="text" id="contactInfo" placeholder="+49 911 …" required />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Objekt speichern</button>
+          <button type="reset" class="btn btn-outline" style="color:var(--primary);border-color:var(--border)">Zurücksetzen</button>
+        </div>
+      </form>
+    </div><!-- end formCard -->
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand footer-col">
+      <a href="index.html" class="nav-logo">
+        <div class="nav-logo-icon">🏠</div>
+        <span style="color:#fff">MS <em style="color:var(--accent);font-style:normal">Immobilien</em></span>
+      </a>
+      <p>Ihr persönlicher Immobilienmakler in Nürnberg. Frisch gestartet, voll dabei – für Sie.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="index.html#ueber-mich">Über mich</a></li>
+        <li><a href="index.html#leistungen">Leistungen</a></li>
+        <li><a href="index.html#warum-ich">Warum ich?</a></li>
+        <li><a href="index.html#kontakt">Kontakt</a></li>
+        <li><a href="immobilien.html">Immobilien</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Leistungen</h4>
+      <ul>
+        <li><a href="index.html#leistungen">Kauf begleiten</a></li>
+        <li><a href="index.html#leistungen">Verkauf organisieren</a></li>
+        <li><a href="index.html#leistungen">Vermietung</a></li>
+        <li><a href="index.html#leistungen">Kostenlose Bewertung</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Rechtliches</h4>
+      <ul>
+        <li><a href="#">Impressum</a></li>
+        <li><a href="#">Datenschutz</a></li>
+        <li><a href="#">AGB</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 MS Immobilien – Markus Schmidt. Alle Rechte vorbehalten.</span>
+    <span>Mit ❤️ gemacht in Nürnberg</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="immobilien.js"></script>
+</body>
+</html>
