@@ -8,10 +8,9 @@
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="nav-logo-icon">🏠</div>
+    <div class="nav-logo-icon">MS</div>
     <span>MS <em>Immobilien</em></span>
   </a>
   <ul class="nav-links">
@@ -21,12 +20,42 @@
     <li><a href="#kontakt">Kontakt</a></li>
     <li><a href="immobilien.html" class="nav-cta">Immobilien ansehen</a></li>
   </ul>
+  <div class="nav-auth">
+    <button class="nav-login-btn" id="loginBtn" onclick="openLoginModal()">Anmelden</button>
+    <div class="nav-logged-in" id="loggedInIndicator" style="display:none">
+      <span class="nav-logged-in-badge">Makler</span>
+      <button class="nav-logout-btn" onclick="logout()">Abmelden</button>
+    </div>
+  </div>
 </nav>
 
-<!-- ── HERO ── -->
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay" style="display:none" onclick="handleModalClick(event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Makler-Zugang</h3>
+      <button class="modal-close" onclick="closeLoginModal()">&#10005;</button>
+    </div>
+    <p class="modal-desc">Melden Sie sich an, um Inserate zu verwalten.</p>
+    <form id="loginForm" autocomplete="on" style="display:flex;flex-direction:column;gap:.85rem">
+      <div class="field">
+        <label>Benutzername</label>
+        <input type="text" id="usernameInput" autocomplete="username" placeholder="Benutzername" />
+      </div>
+      <div class="field">
+        <label>Passwort</label>
+        <input type="password" id="passwordInput" autocomplete="current-password" placeholder="Passwort" />
+      </div>
+      <p id="loginError" style="color:#dc2626;font-size:.85rem;display:none">Benutzername oder Passwort falsch.</p>
+      <button type="submit" class="btn btn-primary" style="width:100%">Anmelden</button>
+    </form>
+  </div>
+</div>
+
+<!-- HERO -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge">Ihr Makler in Nürnberg</div>
+    <div class="hero-badge">Ihr Immobilienmakler in Nürnberg</div>
     <h1>Persönlich. Ehrlich. <span>Nah dran.</span></h1>
     <p>Kein großes Büro, kein anonymes Callcenter – nur ich, voll dabei. Als frisch gestarteter Immobilienmakler in Nürnberg gebe ich alles für Ihren Kauf, Verkauf oder Ihre Vermietung.</p>
     <div class="hero-buttons">
@@ -36,7 +65,7 @@
   </div>
 </section>
 
-<!-- ── ÜBER MICH ── -->
+<!-- ÜBER MICH -->
 <section id="ueber-mich">
   <div class="container">
     <div class="about-grid">
@@ -59,7 +88,7 @@
   </div>
 </section>
 
-<!-- ── LEISTUNGEN ── -->
+<!-- LEISTUNGEN -->
 <section id="leistungen" class="services">
   <div class="container">
     <span class="section-label">Leistungen</span>
@@ -68,32 +97,32 @@
 
     <div class="services-grid">
       <div class="service-card">
-        <div class="service-icon">🏡</div>
+        <div class="service-icon">Kauf</div>
         <h3>Kauf begleiten</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ich finde gemeinsam mit Ihnen die passende Immobilie in Nürnberg – und begleite Sie Schritt für Schritt bis zur Schlüsselübergabe.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">💶</div>
+        <div class="service-icon">Verk.</div>
         <h3>Verkauf organisieren</h3>
         <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ich kümmere mich um Fotos, Exposé, Besichtigungen und Verhandlungen – damit Sie den bestmöglichen Preis erzielen.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🔑</div>
+        <div class="service-icon">Miet.</div>
         <h3>Vermietung abwickeln</h3>
         <p>At vero eos et accusamus et iusto odio dignissimos. Ich prüfe Interessenten, führe Besichtigungen durch und begleite die Vertragsunterzeichnung – Sie müssen sich um nichts kümmern.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">📊</div>
+        <div class="service-icon">Bew.</div>
         <h3>Kostenlose Bewertung</h3>
         <p>Nam libero tempore cum soluta nobis est eligendi optio. Ich bewerte Ihre Immobilie ehrlich und realistisch – damit Sie wissen, was Ihr Objekt auf dem Nürnberger Markt wirklich wert ist.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">📸</div>
+        <div class="service-icon">Exp.</div>
         <h3>Professionelles Exposé</h3>
         <p>Temporibus autem quibusdam et aut officiis debitis rerum. Hochwertige Fotos, ansprechender Text und eine klare Präsentation – damit Ihr Objekt heraussticht.</p>
       </div>
       <div class="service-card">
-        <div class="service-icon">🤝</div>
+        <div class="service-icon">Verh.</div>
         <h3>Verhandlung & Abschluss</h3>
         <p>Itaque earum rerum hic tenetur a sapiente delectus. Ich führe die Verhandlungen für Sie und sorge für einen reibungslosen Ablauf bis zur notariellen Beurkundung.</p>
       </div>
@@ -101,7 +130,7 @@
   </div>
 </section>
 
-<!-- ── WARUM ICH ── -->
+<!-- WARUM ICH -->
 <section id="warum-ich">
   <div class="container">
     <span class="section-label">Warum ich?</span>
@@ -133,7 +162,7 @@
   </div>
 </section>
 
-<!-- ── KONTAKT ── -->
+<!-- KONTAKT -->
 <section id="kontakt" class="contact">
   <div class="container">
     <span class="section-label">Kontakt</span>
@@ -143,35 +172,35 @@
     <div class="contact-grid">
       <div class="contact-info">
         <div class="contact-item">
-          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-icon">Ort</div>
           <div>
             <h4>Standort</h4>
             <p>Nürnberg & Umgebung</p>
           </div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon">📞</div>
+          <div class="contact-item-icon">Tel</div>
           <div>
             <h4>Telefon</h4>
             <p>+49 911 123 456 78</p>
           </div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon">✉️</div>
+          <div class="contact-item-icon">Mail</div>
           <div>
             <h4>E-Mail</h4>
             <p>hallo@ms-immobilien-nbg.de</p>
           </div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon">🕐</div>
+          <div class="contact-item-icon">Zeit</div>
           <div>
             <h4>Erreichbarkeit</h4>
             <p>Mo–Sa 8:00–20:00 Uhr</p>
           </div>
         </div>
         <div class="contact-item">
-          <div class="contact-item-icon">⚡</div>
+          <div class="contact-item-icon">Info</div>
           <div>
             <h4>Antwortzeit</h4>
             <p>In der Regel innerhalb von 2 Stunden</p>
@@ -220,12 +249,12 @@
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand footer-col">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">🏠</div>
+        <div class="nav-logo-icon">MS</div>
         <span style="color:#fff">MS <em style="color:var(--accent);font-style:normal">Immobilien</em></span>
       </a>
       <p>Ihr persönlicher Immobilienmakler in Nürnberg. Frisch gestartet, voll dabei – für Sie.</p>
@@ -260,12 +289,13 @@
   </div>
   <div class="footer-bottom">
     <span>© 2026 MS Immobilien – Markus Schmidt. Alle Rechte vorbehalten.</span>
-    <span>Mit ❤️ gemacht in Nürnberg</span>
+    <span>Gemacht in Nürnberg</span>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
+<script src="auth.js"></script>
 <script src="index.js"></script>
 </body>
 </html>

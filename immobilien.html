@@ -8,10 +8,9 @@
 </head>
 <body>
 
-<!-- ── NAVBAR ── -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="nav-logo-icon">🏠</div>
+    <div class="nav-logo-icon">MS</div>
     <span>MS <em>Immobilien</em></span>
   </a>
   <ul class="nav-links">
@@ -21,15 +20,45 @@
     <li><a href="index.html#kontakt">Kontakt</a></li>
     <li><a href="immobilien.html" class="nav-cta active">Immobilien</a></li>
   </ul>
+  <div class="nav-auth">
+    <button class="nav-login-btn" id="loginBtn" onclick="openLoginModal()">Anmelden</button>
+    <div class="nav-logged-in" id="loggedInIndicator" style="display:none">
+      <span class="nav-logged-in-badge">Makler</span>
+      <button class="nav-logout-btn" onclick="logout()">Abmelden</button>
+    </div>
+  </div>
 </nav>
 
-<!-- ── PAGE HERO ── -->
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay" style="display:none" onclick="handleModalClick(event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Makler-Zugang</h3>
+      <button class="modal-close" onclick="closeLoginModal()">&#10005;</button>
+    </div>
+    <p class="modal-desc">Melden Sie sich an, um Inserate zu verwalten.</p>
+    <form id="loginForm" autocomplete="on" style="display:flex;flex-direction:column;gap:.85rem">
+      <div class="field">
+        <label>Benutzername</label>
+        <input type="text" id="usernameInput" autocomplete="username" placeholder="Benutzername" />
+      </div>
+      <div class="field">
+        <label>Passwort</label>
+        <input type="password" id="passwordInput" autocomplete="current-password" placeholder="Passwort" />
+      </div>
+      <p id="loginError" style="color:#dc2626;font-size:.85rem;display:none">Benutzername oder Passwort falsch.</p>
+      <button type="submit" class="btn btn-primary" style="width:100%">Anmelden</button>
+    </form>
+  </div>
+</div>
+
+<!-- PAGE HERO -->
 <div class="page-hero">
   <h1>Immobilien in Nürnberg</h1>
   <p>Aktuelle Angebote – von mir persönlich ausgewählt und betreut</p>
 </div>
 
-<!-- ── FILTER ── -->
+<!-- FILTER -->
 <div style="background:var(--white);border-bottom:1px solid var(--border);padding:1rem 1.5rem">
   <div class="container" style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
     <select id="filterType" onchange="renderListings()" style="padding:.5rem .8rem;border:1.5px solid var(--border);border-radius:8px;font-size:.9rem;color:var(--text);outline:none;cursor:pointer">
@@ -50,39 +79,26 @@
   </div>
 </div>
 
-<!-- ── LISTINGS ── -->
+<!-- LISTINGS -->
 <section class="listings-section">
   <div class="container">
     <div class="listings-header">
       <h2>Aktuelle Angebote</h2>
-      <button class="btn btn-primary" onclick="document.getElementById('addSection').scrollIntoView({behavior:'smooth'})">
-        🔒 Objekt eintragen
+      <button id="addBtn" class="btn btn-primary" style="display:none"
+              onclick="document.getElementById('addSection').scrollIntoView({behavior:'smooth'})">
+        Objekt eintragen
       </button>
     </div>
     <div id="listingsContainer"></div>
   </div>
 </section>
 
-<!-- ── ADMIN LOGIN ── -->
-<section class="add-section" id="addSection">
+<!-- FORMULAR (nur für eingeloggte Makler) -->
+<section class="add-section" id="addSection" style="display:none">
   <div class="container">
-    <div class="add-card" id="loginCard">
-      <h2>🔒 Nur für den Makler</h2>
-      <p style="color:var(--muted);margin-bottom:1.5rem;font-size:.97rem">Dieser Bereich ist geschützt. Bitte Passwort eingeben um Objekte einzutragen.</p>
-      <form id="loginForm" style="display:flex;gap:.75rem;max-width:420px">
-        <div class="field" style="flex:1;margin:0">
-          <input type="password" id="passwordInput" placeholder="Passwort …" style="width:100%" autocomplete="current-password" />
-        </div>
-        <button type="submit" class="btn btn-primary" style="white-space:nowrap">Einloggen</button>
-      </form>
-      <p id="loginError" style="color:#dc2626;font-size:.88rem;margin-top:.6rem;display:none">Falsches Passwort. Bitte erneut versuchen.</p>
-    </div>
-
-<!-- ── FORMULAR ── -->
-    <div class="add-card" id="formCard" style="display:none">
+    <div class="add-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;padding-bottom:1rem;border-bottom:2px solid var(--border)">
-        <h2 style="margin:0;border:none;padding:0">➕ Neues Objekt eintragen</h2>
-        <button onclick="logout()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.88rem;font-weight:600">🔓 Ausloggen</button>
+        <h2 id="formTitle" style="margin:0;border:none;padding:0">Neues Objekt eintragen</h2>
       </div>
 
       <form id="propForm">
@@ -177,6 +193,18 @@
           <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-size:.93rem"><input type="checkbox" value="Neubau" /> Neubau</label>
         </div>
 
+        <div class="form-section-title">Fotos</div>
+        <div class="field">
+          <label>Bilder hochladen (mehrere möglich)</label>
+          <label class="file-drop" id="fileDrop">
+            <input type="file" id="images" accept="image/*" multiple style="display:none" />
+            <span class="file-drop-icon" style="font-size:1.5rem;color:var(--muted)">+</span>
+            <span class="file-drop-text">Klicken oder Bilder hierher ziehen</span>
+            <span class="file-drop-hint">JPG, PNG, WebP – werden automatisch komprimiert</span>
+          </label>
+          <div id="imagePreview" class="img-preview-grid"></div>
+        </div>
+
         <div class="form-section-title">Preis</div>
         <div class="form-2col">
           <div class="field">
@@ -212,20 +240,21 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn btn-primary">Objekt speichern</button>
-          <button type="reset" class="btn btn-outline" style="color:var(--primary);border-color:var(--border)">Zurücksetzen</button>
+          <button type="submit" id="submitBtn" class="btn btn-primary">Objekt speichern</button>
+          <button type="button" id="cancelEditBtn" class="btn btn-outline" onclick="cancelEdit()" style="display:none;color:var(--primary);border-color:var(--border)">Abbrechen</button>
+          <button type="reset" id="resetBtn" class="btn btn-outline" style="color:var(--primary);border-color:var(--border)">Zurücksetzen</button>
         </div>
       </form>
-    </div><!-- end formCard -->
+    </div>
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
+<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand footer-col">
       <a href="index.html" class="nav-logo">
-        <div class="nav-logo-icon">🏠</div>
+        <div class="nav-logo-icon">MS</div>
         <span style="color:#fff">MS <em style="color:var(--accent);font-style:normal">Immobilien</em></span>
       </a>
       <p>Ihr persönlicher Immobilienmakler in Nürnberg. Frisch gestartet, voll dabei – für Sie.</p>
@@ -260,12 +289,20 @@
   </div>
   <div class="footer-bottom">
     <span>© 2026 MS Immobilien – Markus Schmidt. Alle Rechte vorbehalten.</span>
-    <span>Mit ❤️ gemacht in Nürnberg</span>
+    <span>Gemacht in Nürnberg</span>
   </div>
 </footer>
 
 <div class="toast" id="toast"></div>
 
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lbPrev" onclick="event.stopPropagation();lbStep(-1)">&#8249;</button>
+  <img id="lbImg" src="" alt="" />
+  <button id="lbNext" onclick="event.stopPropagation();lbStep(1)">&#8250;</button>
+  <button id="lbClose" onclick="closeLightbox()">&#10005;</button>
+</div>
+
+<script src="auth.js"></script>
 <script src="immobilien.js"></script>
 </body>
 </html>
