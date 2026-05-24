@@ -55,7 +55,7 @@ function setMainImage(index) {
 
 // ── RENDER ──
 function render(p) {
-  document.title = `${p.title} – MS Immobilien`;
+  document.title = `${p.title} – David's Immobilien`;
   galleryImages = (p.images && p.images.length > 0) ? p.images : [];
 
   const hasImages = galleryImages.length > 0;
@@ -98,7 +98,7 @@ function render(p) {
       <div class="detail-main">
         <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem">
           <span class="prop-tag">${escHtml(p.offerType)}</span>
-          <span class="prop-tag" style="background:rgba(26,60,94,.1);color:var(--primary)">${escHtml(p.propType)}</span>
+          <span class="prop-tag" style="background:rgba(33,47,89,.1);color:var(--primary)">${escHtml(p.propType)}</span>
         </div>
         <h1 class="detail-title">${escHtml(p.title)}</h1>
         <p class="detail-location">${escHtml(p.district || ((p.zip + ' ' + p.city).trim()))}</p>
@@ -141,10 +141,10 @@ function render(p) {
           <div class="detail-price-label">${escHtml(price.label)}</div>
 
           <div class="detail-agent">
-            <div class="detail-agent-avatar">MS</div>
+            <div class="detail-agent-avatar">DI</div>
             <div>
               <div class="detail-agent-name">${escHtml(p.contactName)}</div>
-              <div class="detail-agent-role">Immobilienmakler · MS Immobilien</div>
+              <div class="detail-agent-role">Immobilienmakler · David's Immobilien</div>
             </div>
           </div>
 
